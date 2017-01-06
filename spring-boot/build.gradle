@@ -1,0 +1,45 @@
+buildscript {
+	ext {
+		springBootVersion = '1.4.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") // execute appliction 
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'spring-boot'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')  // template engine
+	compile('org.springframework.boot:spring-boot-starter-web')        // web + embed tomcat
+
+
+	compile group: 'org.webjars', name: 'webjars-locator', version: '0.32'  // allow you find web dependence in the jar format
+	compile group: 'org.webjars', name: 'jquery', version: '3.1.1-1'        // include the jquery as a dependence of the project
+	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7-1'     // include the boostrap as a dependence of the project
+
+
+	
+	
+	runtime('org.springframework.boot:spring-boot-devtools')
+	runtime('com.h2database:h2')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
