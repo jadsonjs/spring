@@ -39,11 +39,31 @@ Static resources inside our application
 		      </div>
 		      <div class="modal-body">
 		       
+		       		<!--  
+		       		 It will call our create method in the control passing the object to be save
+		       		 The spring MVC know the mapping to the object and create a object Book passing the information filled in the form.
+		       		-->
+		      		<form action="/books/create" method="POST">
+		      		
+		      			<div class="form-group">
+		      				<label for="title">Title</label>
+		      				<input type="text" class="form-control" id="title" placeholder="Title" />
+		      			</div>
+		      			
+		      			<div class="form-group">
+		      				<label for="author">Author</label>
+		      				<input type="text" class="form-control" id="author" placeholder="Author" />
+		      			</div>
+		      				   
+		      			 <div class="modal-footer">
+				      		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				        	<button type="button" class="btn btn-primary">Save changes</button>
+				      	</div>	   
+		      				      			
+		      		</form>
+		       
 		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
-		      </div>
+		      
 		    </div>
 		  </div>
 		</div>
