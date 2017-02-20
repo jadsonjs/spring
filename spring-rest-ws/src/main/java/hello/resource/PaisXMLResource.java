@@ -28,11 +28,11 @@ public class PaisXMLResource {
 		
 	}
 	
-	@RequestMapping(value = "/paisesXML", method = RequestMethod.GET, headers="Accept=application/xml")  
-	public PaisesXMLList getCountries(){  
-		PaisesXMLList countryList = createCountryList();  
-	   return countryList;  
-	}  
+	@RequestMapping(value = "/paisesXML", method = RequestMethod.GET, headers = "Accept=application/xml")
+	public PaisesXMLList getCountries() {
+		PaisesXMLList countryList = createCountryList();
+		return countryList;
+	}
 
 	
 	@RequestMapping(value = "/paisesXML/{nome}", method = RequestMethod.GET)

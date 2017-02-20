@@ -7,6 +7,10 @@ public class Pais {
 	private String capital;
 	private Moeda moeda;
 	
+	public Pais() {
+	
+	}
+
 	public Pais(String nome, int populacao, String capital, Moeda moeda) {
 		this.nome = nome;
 		this.populacao = populacao;
