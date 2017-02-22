@@ -32,17 +32,17 @@ public class WebServiceConfig {
 	}
 
 	@Bean(name = "paises")
-	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema countriesSchema) {
+	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema paisesSchema) {
 		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
 		wsdl11Definition.setPortTypeName("PaisesPort");
 		wsdl11Definition.setLocationUri("/ws");
 		wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
-		wsdl11Definition.setSchema(countriesSchema);
+		wsdl11Definition.setSchema(paisesSchema);
 		return wsdl11Definition;
 	}
 
 	@Bean
-	public XsdSchema countriesSchema() {
+	public XsdSchema paisesSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("paises.xsd"));
 	}
 

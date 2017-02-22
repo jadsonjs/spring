@@ -28,7 +28,7 @@ public class PaisEndpoint {
 		this.paisRepository = paisRepository;
 	}
 
-	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getPaisRequest")
 	@ResponsePayload
 	public GetPaisResponse getCountry(@RequestPayload GetPaisRequest request) {
 		GetPaisResponse response = new GetPaisResponse();

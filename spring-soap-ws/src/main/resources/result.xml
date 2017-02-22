@@ -1,0 +1,14 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:getPaisResponse xmlns:ns2="http://spring.io/guides/gs-producing-web-service">
+            <ns2:pais>
+                <ns2:nome>Brasil</ns2:nome>
+                <ns2:populacao>46704314</ns2:populacao>
+                <ns2:capital>Brasília</ns2:capital>
+                <ns2:moeda>REAL</ns2:moeda>
+            </ns2:pais>
+        </ns2:getPaisResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
