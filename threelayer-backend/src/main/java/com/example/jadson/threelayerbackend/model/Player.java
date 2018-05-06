@@ -104,6 +104,8 @@ public class Player {
 	}
 	
 	public void setTeam(Team team) {
+		if(team == null)
+			throw new IllegalArgumentException("A Team is required !");
 		this.team = team;
 	}
 	
