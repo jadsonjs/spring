@@ -1,7 +1,4 @@
 /*
- * Federal University of Rio Grande do Norte
- * Department of Informatics and Applied Mathematics
- * Collaborative & Automated Software Engineering (CASE) Research Group
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
