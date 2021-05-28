@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+>
+<head>
+    <title>Banco 24h</title>
+</head>
+<body>
+<h1>Página Interna</h1>
+<h1 th:inline="text"> Usuário Logado: [[${#httpServletRequest.remoteUser}]]!</h1>
+
+<p>Clique <a th:href="@{/conta/all}">aqui</a> para ver as contas do banco.</p>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+>
+<head>
+    <title>Banco 24h</title>
+</head>
+<body>
+<h1>Contas Cadastradas  </h1>
+
+<p> <a th:href="@{/conta/pre-create}"> Criar Nova Conta </a> </p>
+
+    <table>
+        <tr th:each="c : ${contas}">
+            <td th:text="${c.id}">1 </td>
+            <td th:text="${c.saldo}"> Saldo </td>
+        </tr>
+    </table>
+
+</body>
+</html>
