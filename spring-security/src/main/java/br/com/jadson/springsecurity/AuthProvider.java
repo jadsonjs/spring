@@ -45,7 +45,7 @@ import java.util.Optional;
 /**
  * Jadson Santos - jadsonjs@gmail.com
  */
-@Component
+// @Component
 public class AuthProvider implements AuthenticationProvider {
 
     private static final int ATTEMPTS_LIMIT = 3;
@@ -61,36 +61,36 @@ public class AuthProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
-        UserDetails user = userDetailsService.loadUserByUsername(username);
-        if(authentication.getCredentials() != null) {
-            if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
-                processFailedAttempts(username, (Usuario) user);
-            }
-        }
+//        String username = authentication.getName();
+//        UserDetails user = userDetailsService.loadUserByUsername(username);
+//        if(authentication.getCredentials() != null) {
+//            if (!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
+//                processFailedAttempts(username, (Usuario) user);
+//            }
+//        }
         return authentication;
     }
 
     private void processFailedAttempts(String username, Usuario user) {
 
-        Optional<TentativasLogin> userAttempts = attemptsRepository.findAttemptsByUsername(username);
-
-        if (userAttempts.isEmpty()) {
-            TentativasLogin attempts = new TentativasLogin();
-            attempts.setUsername(username);
-            attempts.setAttempts(1);
-            attemptsRepository.save(attempts);
-        } else {
-            TentativasLogin attempts = userAttempts.get();
-            attempts.setAttempts(attempts.getAttempts() + 1);
-            attemptsRepository.save(attempts);
-
-            if (attempts.getAttempts() + 1 > ATTEMPTS_LIMIT) {
-                user.setAccountNonLocked(false);
-                userRepository.save(user);
-                throw new LockedException("Too many invalid attempts. Account is locked!!");
-            }
-        }
+//        Optional<TentativasLogin> userAttempts = attemptsRepository.findAttemptsByUsername(username);
+//
+//        if (userAttempts.isEmpty()) {
+//            TentativasLogin attempts = new TentativasLogin();
+//            attempts.setUsername(username);
+//            attempts.setAttempts(1);
+//            attemptsRepository.save(attempts);
+//        } else {
+//            TentativasLogin attempts = userAttempts.get();
+//            attempts.setAttempts(attempts.getAttempts() + 1);
+//            attemptsRepository.save(attempts);
+//
+//            if (attempts.getAttempts() + 1 > ATTEMPTS_LIMIT) {
+//                user.setActive(false);
+//                userRepository.save(user);
+//                throw new LockedException("Too many invalid attempts. Account is locked!!");
+//            }
+//        }
     }
 
     @Override

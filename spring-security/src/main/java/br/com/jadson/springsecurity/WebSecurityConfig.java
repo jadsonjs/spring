@@ -25,9 +25,11 @@
  */
 package br.com.jadson.springsecurity;
 
+import br.com.jadson.springsecurity.model.Papel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -74,6 +76,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                   * endpoints que começam com / /home não precisam ser protegidos
                   */
                 .antMatchers("/", "/home").permitAll()
+
+                // apenas o gerente podem salvar uma nova conta
+                .antMatchers("/conta/pre-create").hasAuthority(Papel.GERENTE.toString())
+
+                //  funcionário ou o gerente podem acessar os recurso de conta
+                .antMatchers("/conta/*").hasAnyAuthority(Papel.GERENTE.toString(), Papel.FUNCIONARIO.toString())
+
                 /*
                  * Qualquer outra requisicao devem ser autenticada
                  */
@@ -85,6 +94,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                   */
                 .logout().invalidateHttpSession(true).clearAuthentication(true).permitAll();
     }
+
+    /**
+     * Libera acesso ao recurso
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+    }
+
 
 
 

@@ -29,13 +29,22 @@
  */
 package br.com.jadson.springsecurity.service;
 
+import br.com.jadson.springsecurity.model.Papel;
 import br.com.jadson.springsecurity.model.Usuario;
 import br.com.jadson.springsecurity.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -49,13 +58,32 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = userRepository.findUserByUsername(username)
+        Usuario usuario = userRepository.findUserByUsername(username)
                 .orElseThrow( () -> new UsernameNotFoundException("Login ou senha inválidos"));
-        return user;
+        List<GrantedAuthority> authorities = getUserAuthority(usuario.getRole());
+        return buildUserForAuthentication(usuario, authorities);
     }
+
 
     public void createUser(UserDetails user) {
         userRepository.save( (Usuario) user );
+    }
+
+    /**
+     * Gera a lista de papeis que o usuário tem.
+     * @param role
+     * @return
+     */
+    private List<GrantedAuthority> getUserAuthority(Papel role) {
+        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
+        roles.add(new SimpleGrantedAuthority(role.toString()));
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles);
+        return grantedAuthorities;
+    }
+
+    private UserDetails buildUserForAuthentication(Usuario user, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                user.isActive(), true, true, true, authorities);
     }
 
 }

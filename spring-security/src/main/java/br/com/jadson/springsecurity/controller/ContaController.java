@@ -27,8 +27,10 @@
 package br.com.jadson.springsecurity.controller;
 
 import br.com.jadson.springsecurity.model.Conta;
+import br.com.jadson.springsecurity.model.Papel;
 import br.com.jadson.springsecurity.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -82,8 +84,14 @@ public class ContaController {
         return "/conta/create";   /// forward para pagina /conta/create.html
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @PostMapping(value= {"/save"})
     public ModelAndView registrarFrequencia(Conta conta, BindingResult br, HttpSession session, HttpServletRequest request, RedirectAttributes ra){
+
+
+        if (request.isUserInRole(Papel.GERENTE.toString())) {
+            System.out.println("GERENTE");
+        }
 
         // redirect para end point /conta/all
         ModelAndView modelAndView = new ModelAndView( new RedirectView("all", true) );
