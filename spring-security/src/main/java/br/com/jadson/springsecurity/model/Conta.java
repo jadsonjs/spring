@@ -43,18 +43,14 @@ public class Conta {
 
     private Double saldo = 0.0d;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Conta conta = (Conta) o;
-        return Objects.equals(id, conta.id) && Objects.equals(saldo, conta.saldo);
-    }
+    @Transient
+    private Integer numero = 0;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, saldo);
-    }
+    @Transient
+    private String nome = "";
+
+    public Conta(){ }
+
 
     @Override
     public String toString() {
@@ -76,4 +72,12 @@ public class Conta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
+
+    public Integer getNumero() { return numero; }
+
+    public void setNumero(Integer numero) { this.numero = numero; }
+
+    public String getNome() { return nome; }
+
+    public void setNome(String nome) { this.nome = nome; }
 }

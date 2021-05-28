@@ -86,12 +86,16 @@ public class ContaController {
 
     @PreAuthorize("hasRole('GERENTE')")
     @PostMapping(value= {"/save"})
-    public ModelAndView registrarFrequencia(Conta conta, BindingResult br, HttpSession session, HttpServletRequest request, RedirectAttributes ra){
+    public ModelAndView save(Conta conta, BindingResult br, HttpSession session, HttpServletRequest request, RedirectAttributes ra){
 
 
         if (request.isUserInRole(Papel.GERENTE.toString())) {
             System.out.println("GERENTE");
         }
+
+        System.out.println("$$SALDO:"+conta.getSaldo());
+        System.out.println("$$NUMERO:"+conta.getNumero());
+        System.out.println("NOME:"+conta.getNome());
 
         // redirect para end point /conta/all
         ModelAndView modelAndView = new ModelAndView( new RedirectView("all", true) );

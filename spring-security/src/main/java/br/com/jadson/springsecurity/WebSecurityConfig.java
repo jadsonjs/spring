@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // apenas o gerente podem salvar uma nova conta
                 .antMatchers("/conta/pre-create").hasAuthority(Papel.GERENTE.toString())
+                .antMatchers("/conta/save").hasAuthority(Papel.GERENTE.toString())
 
                 //  funcionário ou o gerente podem acessar os recurso de conta
                 .antMatchers("/conta/*").hasAnyAuthority(Papel.GERENTE.toString(), Papel.FUNCIONARIO.toString())
