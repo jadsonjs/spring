@@ -46,6 +46,8 @@ import java.util.*;
 @TestConfiguration
 public class SpringSecurityAuthenticationTestConfig {
 
+    static User testeGerenterUser;
+
     /**
      * cria um UserDetailsService em memória com os usuários para o teste
      * @return
@@ -55,17 +57,19 @@ public class SpringSecurityAuthenticationTestConfig {
     public UserDetailsService userDetailsService() {
 
         List<GrantedAuthority> grantedAuthoritiesGerente = List.of(new SimpleGrantedAuthority(Papel.GERENTE.toString()));
-
         List<GrantedAuthority> grantedAuthoritiesFuncionario = List.of(new SimpleGrantedAuthority(Papel.FUNCIONARIO.toString()));
 
-        User testeGerenterUser =  new User("gerente", "1233456",
+        testeGerenterUser =  new User("gerente", "1233456",
                 true, true, true, true, grantedAuthoritiesGerente);
 
         User testeFuncionarioUser =  new User("funcionario", "1233456",
                 true, true, true, true, grantedAuthoritiesFuncionario);
 
-
         return new InMemoryUserDetailsManager(Arrays.asList(testeGerenterUser, testeFuncionarioUser));
+    }
+
+    public static User getTesteGerenterUser() {
+        return testeGerenterUser;
     }
 
 }

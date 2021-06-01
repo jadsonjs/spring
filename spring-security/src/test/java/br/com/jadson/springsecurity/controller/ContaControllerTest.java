@@ -14,12 +14,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -43,6 +46,8 @@ class ContaControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    MockMvc mockMvc2;
+
     @Autowired
     TestEntityManager testEntityManager;
 
@@ -51,9 +56,10 @@ class ContaControllerTest {
      */
     @BeforeEach
     void setUp() {
-
-        MockitoAnnotations.openMocks(this);
-
+        mockMvc2 = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build();
     }
 
     @AfterEach
@@ -71,13 +77,14 @@ class ContaControllerTest {
     void saveContaTest() throws Exception {
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/conta/save")
-                .param("conta.saldo", "120.d")
-                .param("conta.numero", "123456")
-                .param("conta.nome", "Teste")
+                .param("saldo", "120.d")
+                .param("numero", "123456")
+                .param("nome", "Teste")
+                .with(SecurityMockMvcRequestPostProcessors.user(SpringSecurityAuthenticationTestConfig.getTesteGerenterUser()))
         )
          // the method send a redirect
         .andExpect(MockMvcResultMatchers.status().is(302))
-        .andExpect(MockMvcResultMatchers.redirectedUrl("all?conta=1"))
+        //.andExpect(MockMvcResultMatchers.redirectedUrl("all?conta=1"))
         .andDo(MockMvcResultHandlers.print());
 
 
@@ -90,7 +97,40 @@ class ContaControllerTest {
         List<Conta> contas = query.getResultList();
         Assertions.assertEquals(1, contas.size());
 
-        Assertions.assertEquals(1, contas.get(0).getId());
+        Assertions.assertEquals(123456, contas.get(0).getNumero());
+    }
+
+
+    /**
+     * A integration test of back account save
+     */
+    @Test
+    void saveContaTest2() throws Exception {
+
+        ResultActions result = mockMvc2.perform(MockMvcRequestBuilders.post("/conta/save")
+                .param("saldo", "120.d")
+                .param("numero", "654321")
+                .param("nome", "Teste")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.user("admin").password("pass").roles("USER","ADMIN"))
+                .with(SecurityMockMvcRequestPostProcessors.user(SpringSecurityAuthenticationTestConfig.getTesteGerenterUser()))
+        )
+                // the method send a redirect
+                .andExpect(MockMvcResultMatchers.status().is(302))
+                //.andExpect(MockMvcResultMatchers.redirectedUrl("all?conta=1"))
+                .andDo(MockMvcResultHandlers.print());
+
+
+        /*******************************************************
+         * Verifica se a conta foi salva no banco
+         ******************************************************/
+        Query query = testEntityManager.getEntityManager().createQuery("SELECT c FROM Conta c");
+
+        @SuppressWarnings("unchecked")
+        List<Conta> contas = query.getResultList();
+        Assertions.assertEquals(1, contas.size());
+
+        Assertions.assertEquals(654321, contas.get(0).getNumero());
     }
 
 
@@ -102,9 +142,9 @@ class ContaControllerTest {
     void saveContaTestForbiden() throws Exception {
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/conta/save")
-                .param("conta.saldo", "120.d")
-                .param("conta.numero", "123456")
-                .param("conta.nome", "Teste")
+                .param("saldo", "120.d")
+                .param("numero", "123456")
+                .param("nome", "Teste")
         )
                 // the method send a redirect to login
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
@@ -126,9 +166,9 @@ class ContaControllerTest {
     void saveContaTestUsuarioNaoLogado() throws Exception {
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/conta/save")
-                .param("conta.saldo", "120.d")
-                .param("conta.numero", "123456")
-                .param("conta.nome", "Teste")
+                .param("saldo", "120.d")
+                .param("numero", "123456")
+                .param("nome", "Teste")
         )
                 // the method send a redirect to login
                 .andExpect(MockMvcResultMatchers.status().is(302))
